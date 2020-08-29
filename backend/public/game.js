@@ -1,8 +1,8 @@
 // build deck
-var deck = [];
+let deck = [];
 
 // build suits
-var suits = [];
+let suits = [];
 suits["spades"] = [
   // spades
   ["A", "spade"],
@@ -69,13 +69,68 @@ suits["clubs"] = [
 ];
 
 // build stock pile
-var s = [];
+let s = [];
 
 // build waste pile
-var w = [];
+let w = [];
 
 // build foundations
-var spades = [];
-var hearts = [];
-var diamonds = [];
-var clubs = [];
+let spades = [];
+let hearts = [];
+let diamonds = [];
+let clubs = [];
+
+// create deck
+function create(deck, suits) {
+  console.log("Creating Deck...");
+  // loop through each suit
+  for (let suit in suits) {
+    suit = suits[suit];
+    // loop through each card in suit
+    for (let card in suit) {
+      card = suit[card];
+      deck.push(card); // push card to deck
+    }
+  }
+  return deck;
+}
+
+// shuffle deck
+function shuffle(deck) {
+  console.log("Shuffling Deck...");
+  // declare vars
+  let i = deck.length,
+    temp,
+    rand;
+  // while there remain elements to shuffle
+  while (0 !== i) {
+    // pick a remaining element
+    rand = Math.floor(Math.random() * i);
+    i--;
+    // and swap it with the current element
+    temp = deck[i];
+    deck[i] = deck[rand];
+    deck[rand] = temp;
+  }
+  return deck;
+}
+
+// deal deck
+function deal(deck, table) {
+  console.log("Dealing Deck...");
+  // move all cards to stock
+  table["stock"] = deck;
+  // build tableau
+  let tabs = table["tab"];
+  // loop through 7 tableau rows
+  for (let row = 1; row <= 7; row++) {
+    // loop through 7 piles in row
+    for (let pile = row; pile <= 7; pile++) {
+      // build blank pile on first row
+      if (row === 1) tabs[pile] = [];
+      // deal card to pile
+      move(table["stock"], tabs[pile], false);
+    }
+  }
+  return table;
+}
